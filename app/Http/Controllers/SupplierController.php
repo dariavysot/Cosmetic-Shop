@@ -23,7 +23,7 @@ class SupplierController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'nullable|email|unique:suppliers',
-            'phone' => 'nullable'
+            'phone' => ['required', 'regex:/^\+380\d{9}$/'],
         ]);
 
         Supplier::create($request->all());
