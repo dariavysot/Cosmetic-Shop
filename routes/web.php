@@ -44,3 +44,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/suppliers/{supplier}', [SupplierController::class, 'destroy'])->name('suppliers.destroy');
 
 });
+
+Route::get('/cosmetics', [CosmeticController::class, 'index'])->name('cosmetics.index');
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/cosmetics/create', [CosmeticController::class, 'create'])->name('cosmetics.create');
+    Route::post('/cosmetics', [CosmeticController::class, 'store'])->name('cosmetics.store');
+    Route::get('/cosmetics/{cosmetic}/edit', [CosmeticController::class, 'edit'])->name('cosmetics.edit');
+    Route::put('/cosmetics/{cosmetic}', [CosmeticController::class, 'update'])->name('cosmetics.update');
+    Route::delete('/cosmetics/{cosmetic}', [CosmeticController::class, 'destroy'])->name('cosmetics.destroy');
+});
+
