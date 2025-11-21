@@ -67,6 +67,14 @@ Route::prefix('inventory')->group(function () {
         ->name('inventory.add');
 });
 
+Route::middleware(['auth', 'admin'])->group(function () {
+    // Форма редагування запасів
+    Route::get('/inventory/edit', [InventoryController::class, 'editForm'])->name('inventory.editForm');
+
+    // Обробка оновлення запасів
+    Route::post('/inventory/edit', [InventoryController::class, 'updateQuantity'])->name('inventory.updateQuantity');
+});
+
 
 // Stores
 Route::resource('stores', StoreController::class);

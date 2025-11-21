@@ -62,6 +62,7 @@
             <a href="{{ route('suppliers.index') }}">🚚 Постачальники</a>
             <a href="{{ route('stores.index') }}">🏬 Склади</a>
             <a href="{{ route('inventory.index') }}">📦 Залишки</a>
+            <a href="{{ route('inventory.editForm') }}">✏️ Редагувати кількість</a>
             <a href="{{ route('orders.index') }}">📋 Всі замовлення</a>
             
         @endif
