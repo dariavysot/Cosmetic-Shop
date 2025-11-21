@@ -42,24 +42,26 @@ class AuthController extends Controller
 
     // ---- ОБРОБКА РЕЄСТРАЦІЇ ----
 
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name'     => 'required|max:255',
-            'email'    => 'required|email|unique:users',
-            'password' => 'required|confirmed|min:6',
-        ]);
+   public function register(Request $request)
+{
+    $request->validate([
+        'name'     => 'required|max:255',
+        'email'    => 'required|email|unique:users',
+        'phone'    => ['required', 'regex:/^\+380\d{9}$/'],
+        'password' => 'required|confirmed|min:6',
+    ]);
 
-        $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+    $user = User::create([
+        'name'     => $request->name,
+        'email'    => $request->email,
+        'phone'    => $request->phone,
+        'password' => Hash::make($request->password),
+    ]);
 
-        Auth::login($user);
+    Auth::login($user);
 
-        return redirect()->route('home')->with('success', 'Registration successful.');
-    }
+    return redirect()->route('home')->with('success', 'Registration successful.');
+}
 
     // ---- ВИХІД ----
 

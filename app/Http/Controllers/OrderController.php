@@ -29,24 +29,33 @@ class OrderController extends Controller
 
         $total = 0;
 
-        // Перевірка залишків
+        // 1. Перевірка залишків у ПЕРШОМУ складі
         foreach ($cart->items as $item) {
-            $inventory = StoreInventory::where('cosmetic_id', $item->cosmetic_id)->first();
+            $inventory = StoreInventory::where('cosmetic_id', $item->cosmetic_id)
+                ->where('quantity', '>=', $item->quantity)
+                ->first(); // беремо перший склад з достатньою кількістю
 
-            if (!$inventory || $inventory->quantity < $item->quantity) {
+            if (!$inventory) {
                 return back()->with('error', "Not enough goods: {$item->cosmetic->name}");
             }
         }
 
-        // Створюємо замовлення
+        // 2. Створюємо замовлення
         $order = Order::create([
             'user_id' => Auth::id(),
             'total_price' => 0,
             'status' => 'created'
         ]);
 
-        // Додаємо позиції замовлення + списуємо зі складу
+        // 3. Додаємо позиції + списуємо з першого відповідного складу
         foreach ($cart->items as $item) {
+
+            // Знаходимо склад для списання
+            $inventory = StoreInventory::where('cosmetic_id', $item->cosmetic_id)
+                ->where('quantity', '>=', $item->quantity)
+                ->first();
+
+            // Створюємо позицію замовлення
             OrderItem::create([
                 'order_id' => $order->id,
                 'cosmetic_id' => $item->cosmetic_id,
@@ -56,7 +65,7 @@ class OrderController extends Controller
 
             $total += $item->price_snapshot * $item->quantity;
 
-            $inventory = StoreInventory::where('cosmetic_id', $item->cosmetic_id)->first();
+            // Списуємо
             $inventory->quantity -= $item->quantity;
             $inventory->save();
         }
@@ -64,7 +73,7 @@ class OrderController extends Controller
         $order->total_price = $total;
         $order->save();
 
-        // Очищаємо корзину
+        // 4. Очищаємо кошик
         $cart->items()->delete();
 
         return redirect()->route('orders.index')
