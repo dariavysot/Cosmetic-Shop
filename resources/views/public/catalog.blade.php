@@ -147,7 +147,7 @@
                                 <form action="{{ route('cart.add') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="cosmetic_id" value="{{ $cosmetic->id }}">
-                                    <button class="btn btn-add">
+                                    <button class="btn btn-success btn-add">
                                         Додати в кошик
                                     </button>
 

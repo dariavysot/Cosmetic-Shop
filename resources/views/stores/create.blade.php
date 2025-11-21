@@ -17,7 +17,7 @@
             <input type="text" name="address" class="form-control">
         </div>
 
-        <button class="btn back-btn">Створити</button>
+        <button class="btn btn-success back-btn">Створити</button>
         <a href="{{ route('stores.index') }}" class="btn btn-minimal">Назад</a>
     </form>
 </div>
