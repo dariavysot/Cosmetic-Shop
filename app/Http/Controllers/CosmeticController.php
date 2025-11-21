@@ -10,12 +10,19 @@ use Illuminate\Http\Request;
 class CosmeticController extends Controller
 {
 
-    public function publicCatalog()
-    {
-        $cosmetics = Cosmetic::with('supplier')->get();
+    public function publicCatalog(Request $request)
+{
+    $query = Cosmetic::with('supplier');
 
-        return view('public.catalog', compact('cosmetics'));
+    if ($request->filled('search')) {
+        $query->where('name', 'LIKE', '%' . $request->search . '%');
     }
+
+    $cosmetics = $query->get();
+
+    return view('public.catalog', compact('cosmetics'));
+}
+
 
     public function index(Request $request)
     {
