@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Cosmetic;
+use App\Models\StoreInventory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,10 +13,7 @@ class CartController extends Controller
 {
     public function index()
     {
-        $cart = Cart::firstOrCreate([
-            'user_id' => Auth::id()
-        ]);
-
+        $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
         $items = $cart->items()->with('cosmetic')->get();
 
         $total = $items->sum(fn($item) => $item->quantity * $item->price_snapshot);
@@ -31,16 +29,24 @@ class CartController extends Controller
         ]);
 
         $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
-
         $cosmetic = Cosmetic::findOrFail($request->cosmetic_id);
 
-        $item = CartItem::where('cart_id', $cart->id)
+        // Перевірка наявності на складах
+        $available = StoreInventory::where('cosmetic_id', $cosmetic->id)->sum('quantity');
+
+        $existing = CartItem::where('cart_id', $cart->id)
             ->where('cosmetic_id', $cosmetic->id)
             ->first();
 
-        if ($item) {
-            $item->quantity += $request->quantity;
-            $item->save();
+        $requestedTotal = ($existing?->quantity ?? 0) + $request->quantity;
+
+        if ($requestedTotal > $available) {
+            return back()->with('error', 'Not enough stock in stores.');
+        }
+
+        if ($existing) {
+            $existing->quantity += $request->quantity;
+            $existing->save();
         } else {
             CartItem::create([
                 'cart_id' => $cart->id,
@@ -50,12 +56,23 @@ class CartController extends Controller
             ]);
         }
 
-        return back()->with('success', 'Item added to cart.');
+         return redirect()->route('cart.index')
+        ->with('success', 'Товар додано до кошика!');
     }
 
     public function update(Request $request, $id)
     {
-        $item = CartItem::findOrFail($id);
+        $item = CartItem::where('id', $id)
+            ->whereHas('cart', fn($q) => $q->where('user_id', Auth::id()))
+            ->firstOrFail();
+
+        // Перевірка наявності
+        $available = StoreInventory::where('cosmetic_id', $item->cosmetic_id)->sum('quantity');
+
+        if ($request->quantity > $available) {
+            return back()->with('error', 'Not enough stock.');
+        }
+
         $item->quantity = max(1, $request->quantity);
         $item->save();
 
@@ -64,7 +81,12 @@ class CartController extends Controller
 
     public function destroy($id)
     {
-        CartItem::findOrFail($id)->delete();
+        $item = CartItem::where('id', $id)
+            ->whereHas('cart', fn($q) => $q->where('user_id', Auth::id()))
+            ->firstOrFail();
+
+        $item->delete();
+
         return back()->with('success', 'Deleted.');
     }
 }

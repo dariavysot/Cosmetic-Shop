@@ -45,24 +45,42 @@
 <div class="sidebar">
     <h4 class="text-center mb-4">Cosmetic Shop</h4>
 
-    <a href="{{ route('home') }}">🏠 Головна</a>
-    <a href="{{ route('cosmetics.index') }}">💄 Косметика</a>
-    <a href="{{ route('suppliers.index') }}">🚚 Постачальники</a>
-    <a href="{{ route('stores.index') }}">🏬 Склади</a>
-    <a href="{{ route('inventory.index') }}">📦 Залишки</a> 
-    
-    
+    <a href="{{ route('home') }}">📖 Каталог</a>
 
-    <hr class="text-white">
+    @auth
 
-    @guest
-        <a href="{{ route('login') }}">🔑 Увійти</a>
-        <a href="{{ route('register') }}">📝 Реєстрація</a>
-    @else
+        {{-- КОШИК И ЗАМОВЛЕННЯ — ЛИШЕ ДЛЯ КОРИСТУВАЧІВ --}}
+        @if(auth()->user()->role !== 'admin')
+            <a href="{{ route('cart.index') }}">🛒 Кошик</a>
+          <!--  < href"{{ ('orders.index') }}">📦 Мої замовлення</a> -->
+        @endif
+
+        {{-- АДМІН МЕНЮ --}}
+        @if(auth()->user()->role === 'admin')
+            <hr class="text-white">
+            <a href="{{ route('cosmetics.index') }}">🛠 Управління косметикою</a>
+            <a href="{{ route('suppliers.index') }}">🚚 Постачальники</a>
+            <a href="{{ route('stores.index') }}">🏬 Склади</a>
+            <a href="{{ route('inventory.index') }}">📦 Залишки</a>
+            
+        @endif
+
+        <hr class="text-white">
+
+        <a href="{{ route('profile') }}">👤 Профіль</a>
+
+        {{-- LOGOUT --}}
         <a href="#" onclick="document.getElementById('logout-form').submit();">🚪 Вийти</a>
         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
             @csrf
         </form>
+
+    @endauth
+
+
+    @guest
+        <a href="{{ route('login') }}">🔑 Увійти</a>
+        <a href="{{ route('register') }}">📝 Реєстрація</a>
     @endguest
 </div>
 

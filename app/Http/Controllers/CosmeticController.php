@@ -9,6 +9,14 @@ use Illuminate\Http\Request;
 
 class CosmeticController extends Controller
 {
+
+    public function publicCatalog()
+    {
+        $cosmetics = Cosmetic::with('supplier')->get();
+
+        return view('public.catalog', compact('cosmetics'));
+    }
+
     public function index(Request $request)
     {
         $query = Cosmetic::query();

@@ -14,9 +14,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StoreController;
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/', [CosmeticController::class, 'publicCatalog'])->name('home');
 
 // =======================
 // АВТОРИЗАЦІЯ
@@ -74,3 +72,11 @@ Route::prefix('inventory')->group(function () {
 Route::resource('stores', StoreController::class);
 Route::get('/stores/{store}/inventory', [StoreController::class, 'inventory'])
      ->name('stores.inventory');
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+    Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/delete/{id}', [CartController::class, 'destroy'])->name('cart.delete');
+});
