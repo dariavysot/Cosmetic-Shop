@@ -22,7 +22,7 @@
     }
 
     .search-input {
-        border: 1px solid #1C1C1C !important;
+        border: 1.5px solid #1C1C1C !important;
         border-radius: 0 !important;
         height: 36px;
         font-size: 14px;
@@ -31,15 +31,15 @@
 
     .custom-btn {
         background: white;
-        border: 1px solid #1C1C1C;
+        border: 1.5px solid #1C1C1C;
         border-radius: 0;
         color: #1C1C1C;
         transition: 0.2s;
     }
 
     .custom-btn:hover {
-        background: #1C1C1C;
         color: white;
+        border: 1.5px solid #1C1C1C;
     }
 
     .product-img {
@@ -88,7 +88,7 @@
 
         background-color: #ffffff;          /* білий фон */
         color: #1C1C1C;                     /* графітовий текст */
-        border: 1px solid #1C1C1C;          /* графітова рамка */
+        border: 1.5px solid #1C1C1C;          /* графітова рамка */
 
         border-radius: 0;                   /* без закруглень */
         transition: 0.25s ease-in-out;      /* плавний ховер */
