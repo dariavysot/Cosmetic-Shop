@@ -1,41 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Магазин косметики</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Cosmetic Shop</title>
+
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f5f5f5;
+        }
+        .sidebar {
+            width: 260px;
+            min-height: 100vh;
+            background: #343a40;
+            color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: #ddd;
+            text-decoration: none;
+            padding: 12px 20px;
+            display: block;
+        }
+        .sidebar a:hover {
+            background: #495057;
+            color: #fff;
+        }
+        .content {
+            margin-left: 260px;
+            padding: 30px;
+        }
+    </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
+<!-- Sidebar -->
+<div class="sidebar">
+    <h4 class="text-center mb-4">Cosmetic Shop</h4>
 
-        <a class="navbar-brand" href="{{ route('home') }}">Cosmetic Shop</a>
+    <a href="{{ route('home') }}">🏠 Головна</a>
+    <a href="{{ route('cosmetics.index') }}">💄 Косметика</a>
+    <a href="{{ route('suppliers.index') }}">🚚 Постачальники</a>
+    <a href="{{ route('stores.index') }}">🏬 Склади</a>
+    <a href="{{ route('inventory.index') }}">📦 Залишки</a> 
+    
+    
 
-        <div>
-            <ul class="navbar-nav ms-auto">
-                @guest
-                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Вхід</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Реєстрація</a></li>
-                @else
-                    <li class="nav-item"><a class="nav-link" href="{{ route('profile') }}">Профіль</a></li>
-                    <li class="nav-item">
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <button class="btn btn-link nav-link">Вихід</button>
-                        </form>
-                    </li>
-                @endguest
-            </ul>
-        </div>
+    <hr class="text-white">
 
-    </div>
-</nav>
+    @guest
+        <a href="{{ route('login') }}">🔑 Увійти</a>
+        <a href="{{ route('register') }}">📝 Реєстрація</a>
+    @else
+        <a href="#" onclick="document.getElementById('logout-form').submit();">🚪 Вийти</a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+            @csrf
+        </form>
+    @endguest
+</div>
 
-<main>
+<!-- Content -->
+<div class="content">
     @yield('content')
-</main>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
