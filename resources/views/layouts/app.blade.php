@@ -52,7 +52,7 @@
         {{-- КОШИК И ЗАМОВЛЕННЯ — ЛИШЕ ДЛЯ КОРИСТУВАЧІВ --}}
         @if(auth()->user()->role !== 'admin')
             <a href="{{ route('cart.index') }}">🛒 Кошик</a>
-          <!--  < href"{{ ('orders.index') }}">📦 Мої замовлення</a> -->
+            <a href="{{ route('orders.index') }}">📦 Мої замовлення</a>
         @endif
 
         {{-- АДМІН МЕНЮ --}}
@@ -62,6 +62,7 @@
             <a href="{{ route('suppliers.index') }}">🚚 Постачальники</a>
             <a href="{{ route('stores.index') }}">🏬 Склади</a>
             <a href="{{ route('inventory.index') }}">📦 Залишки</a>
+            <a href="{{ route('orders.index') }}">📋 Всі замовлення</a>
             
         @endif
 

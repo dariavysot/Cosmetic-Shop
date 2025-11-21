@@ -16,7 +16,7 @@
 
     @if($items->count() == 0)
         <div class="alert alert-info">
-            Ваш кошик порожній. <a href="{{ route('cosmetics.index') }}">Переглянути косметику</a>
+            Ваш кошик порожній. <a href="{{ route('home') }}">Переглянути косметику</a>
         </div>
     @else
 
@@ -79,7 +79,10 @@
             <div class="text-end mt-3">
                 <h4>Всього: <strong>{{ number_format($total, 2) }} ₴</strong></h4>
 
-                <a href="#" class="btn btn-success mt-3 disabled">Оформлення ще в процесі 🚧</a>
+               <form action="{{ route('orders.create') }}" method="POST">
+                    @csrf
+                    <button class="btn btn-primary mt-3">Оформити замовлення</button>
+                </form>
             </div>
 
         </div>

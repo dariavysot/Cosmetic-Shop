@@ -80,3 +80,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/delete/{id}', [CartController::class, 'destroy'])->name('cart.delete');
 });
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::post('/orders/create', [OrderController::class, 'create'])->name('orders.create');
+
+    // Лише адмін може змінювати статус
+    Route::middleware('admin')->group(function () {
+        Route::post('/orders/{order}/status', [OrderController::class, 'updateStatus'])
+            ->name('orders.updateStatus');
+    });
+});

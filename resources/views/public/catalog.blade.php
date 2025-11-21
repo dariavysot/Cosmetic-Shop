@@ -25,16 +25,14 @@
                         <h4 class="text-primary">{{ number_format($cosmetic->price, 2) }} ₴</h4>
 
                         @auth
-                            <form action="{{ route('cart.add') }}" method="POST" class="mt-3 d-flex">
-                                @csrf
-                                <input type="hidden" name="cosmetic_id" value="{{ $cosmetic->id }}">
-                                <input type="number" name="quantity" value="1" min="1" class="form-control w-25 me-2">
-                                <button class="btn btn-success">Додати в кошик</button>
-                            </form>
-                        @else
-                            <a href="{{ route('login') }}" class="btn btn-outline-primary mt-3">
-                                Додати в кошик
-                            </a>
+                            @if(auth()->user()->role !== 'admin')
+                                <form action="{{ route('cart.add') }}" method="POST" class="mt-3 d-flex">
+                                    @csrf
+                                    <input type="hidden" name="cosmetic_id" value="{{ $cosmetic->id }}">
+                                    <input type="number" name="quantity" value="1" min="1" class="form-control w-25 me-2">
+                                    <button class="btn btn-success">Додати в кошик</button>
+                                </form>
+                            @endif
                         @endauth
 
                     </div>
