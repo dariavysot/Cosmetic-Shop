@@ -8,10 +8,13 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('store_inventory', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cosmetic_id')->unique()->constrained('cosmetics')->cascadeOnDelete();
+            $table->foreignId('cosmetic_id')->constrained('cosmetics')->cascadeOnDelete();
+            $table->foreignId('store_id')->constrained('stores')->cascadeOnDelete();
             $table->integer('quantity')->default(0);
             $table->integer('reserved_quantity')->default(0);
             $table->timestamps();
+
+            $table->unique(['cosmetic_id', 'store_id']);
         });
     }
 
