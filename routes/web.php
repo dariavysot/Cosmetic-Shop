@@ -12,6 +12,7 @@ use App\Http\Controllers\CosmeticController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\StoreController;
 
 Route::get('/', function () {
     return view('home');
@@ -55,3 +56,21 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/cosmetics/{cosmetic}', [CosmeticController::class, 'destroy'])->name('cosmetics.destroy');
 });
 
+
+Route::prefix('inventory')->group(function () {
+
+    Route::get('/', [InventoryController::class, 'index'])
+        ->name('inventory.index');
+
+    Route::get('/add', [InventoryController::class, 'addForm'])
+        ->name('inventory.addForm');
+
+    Route::post('/add', [InventoryController::class, 'add'])
+        ->name('inventory.add');
+});
+
+
+// Stores
+Route::resource('stores', StoreController::class);
+Route::get('/stores/{store}/inventory', [StoreController::class, 'inventory'])
+     ->name('stores.inventory');
