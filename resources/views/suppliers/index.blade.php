@@ -12,52 +12,62 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <table class="table custom-table table-striped">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Назва</th>
-                <th>Телефон</th>
-                <th>Email</th>
-                <th>Дії</th>
-            </tr>
-        </thead>
+    <div class="card custom-card">
+        <div class="card-body p-0">
+            <table class="table custom-table mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Назва</th>
+                        <th>Телефон</th>
+                        <th>Email</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
 
-        <tbody>
-            @forelse($suppliers as $supplier)
-                <tr>
-                    <td>{{ $supplier->id }}</td>
-                    <td>{{ $supplier->name }}</td>
-                    <td>{{ $supplier->phone }}</td>
-                    <td>{{ $supplier->email ?? '—' }}</td>
+                <tbody>
+                    @forelse($suppliers as $supplier)
+                        <tr>
+                            <td>{{ $supplier->id }}</td>
+                            <td>{{ $supplier->name }}</td>
+                            <td>{{ $supplier->phone }}</td>
+                            <td>{{ $supplier->email ?? '—' }}</td>
 
-                    <td>
-                        <a href="{{ route('suppliers.edit', $supplier->id) }}" 
-                           class="btn btn-edit btn-sm btn-minimal">Редагувати</a>
+                            <td>
+                                <a href="{{ route('suppliers.edit', $supplier->id) }}" 
+                                class="btn btn-edit btn-sm btn-minimal">Редагувати</a>
 
-                        <form action="{{ route('suppliers.destroy', $supplier->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-delete btn-sm btn-minimal"
-                                    onclick="return confirm('Точно видалити?')">
-                                Видалити
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="5" class="text-center">Постачальників немає</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+                                <form action="{{ route('suppliers.destroy', $supplier->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-delete btn-sm btn-minimal"
+                                            onclick="return confirm('Точно видалити?')">
+                                        Видалити
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center">Постачальників немає</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
 
 <style>
+    .custom-card {
+        border: 2px solid #1C1C1C;
+        border-radius: 0;
+    }
+
     /* Товсті рамки таблиці */
     .custom-table th, .custom-table td {
-        border: 2px solid #1C1C1C !important;
+        border: 1.5px solid #1C1C1C !important;
     }
 
      /* Базовий мінімалістичний стиль для кнопок */

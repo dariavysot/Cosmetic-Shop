@@ -10,41 +10,50 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <table class="table custom-table table-bordered align-middle">
-        <thead>
-            <tr>
-                <th>Назва</th>
-                <th>Адреса</th>
-                <th>Інвентар</th>
-                <th>Дії</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($stores as $store)
-                <tr>
-                    <td>{{ $store->name }}</td>
-                    <td>{{ $store->address }}</td>
-                    <td>
-                        <a href="{{ route('stores.inventory', $store) }}" class="btn btn-minimal btn-sm">Переглянути</a>
-                    </td>
-                    <td>
-                       <a href="{{ route('stores.edit', $store) }}" class="btn btn-edit btn-sm btn-minimal">Редагувати</a>
-                        <form action="{{ route('stores.destroy', $store) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-delete btn-sm btn-minimal">Видалити</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+      <div class="card custom-card">
+        <div class="card-body p-0">
+            <table class="table custom-table mb-0">
+                <thead>
+                    <tr>
+                        <th>Назва</th>
+                        <th>Адреса</th>
+                        <th>Інвентар</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($stores as $store)
+                        <tr>
+                            <td>{{ $store->name }}</td>
+                            <td>{{ $store->address }}</td>
+                            <td>
+                                <a href="{{ route('stores.inventory', $store) }}" class="btn btn-minimal btn-sm">Переглянути</a>
+                            </td>
+                            <td>
+                            <a href="{{ route('stores.edit', $store) }}" class="btn btn-edit btn-sm btn-minimal">Редагувати</a>
+                                <form action="{{ route('stores.destroy', $store) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-delete btn-sm btn-minimal">Видалити</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <style>
+    .custom-card {
+        border: 2px solid #1C1C1C;
+        border-radius: 0;
+    }
+
     /* Товсті рамки таблиці */
     .custom-table th, .custom-table td {
-        border: 2px solid #1C1C1C !important;
+        border: 1.5px solid #1C1C1C !important;
     }
 
     .btn-minimal {
