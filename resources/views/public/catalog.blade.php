@@ -2,8 +2,10 @@
 
 @section('content')
 
-<style>
+<!-- Підключаємо Bootstrap Icons через CDN -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
+<style>
     /* Заголовок */
     .catalog-title {
         text-align: center;
@@ -27,11 +29,18 @@
         background: #fff;
         padding: 0 16px;
         transition: .3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .search-btn:hover {
         background: #1C1C1C;
         color: white;
+    }
+
+    .search-btn i {
+        font-size: 18px;
     }
 
     /* Картка продукту */
@@ -51,13 +60,13 @@
         border-bottom: 2px solid #1C1C1C;
         background: #efefef;
         border-radius: 0;
-        overflow: hidden; /* важливо для crop */
+        overflow: hidden;
     }
 
     .product-img img {
         width: 100%;
         height: 100%;
-        object-fit: cover;     /* обрізає фото красиво */
+        object-fit: cover;
         object-position: center;
     }
 
@@ -116,7 +125,6 @@
         background: #1C1C1C;
         color: #fff;
     }
-
 </style>
 
 
@@ -138,7 +146,7 @@
                 value="{{ request('search') }}">
 
             <button class="btn search-btn">
-                🔍
+                <i class="bi bi-search"></i>
             </button>
 
         </div>
