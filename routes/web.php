@@ -94,6 +94,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::post('/orders/create', [OrderController::class, 'create'])->name('orders.create');
 
+    Route::delete('/orders/{order}', [OrderController::class, 'destroy'])
+        ->name('orders.destroy');
+
+
     // Лише адмін може змінювати статус
     Route::middleware('admin')->group(function () {
         Route::post('/orders/{order}/status', [OrderController::class, 'updateStatus'])
