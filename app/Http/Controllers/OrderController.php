@@ -102,4 +102,32 @@ class OrderController extends Controller
 
         return back()->with('success', 'Статус замовлення оновлено!');
     }
+
+    public function destroy(Order $order)
+    {
+        // Адмін може видалити будь-яке замовлення
+        // Користувач може видалити ТІЛЬКИ своє
+        if (auth()->user()->role !== 'admin' && $order->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        // Повертаємо товари на склад перед видаленням
+        foreach ($order->items as $item) {
+            $inventory = StoreInventory::where('cosmetic_id', $item->cosmetic_id)->first();
+
+            if ($inventory) {
+                $inventory->quantity += $item->quantity;
+                $inventory->save();
+            }
+        }
+
+        // Видаляємо всі позиції
+        $order->items()->delete();
+
+        // Видаляємо саме замовлення
+        $order->delete();
+
+        return redirect()->route('orders.index')
+            ->with('success', 'Замовлення успішно видалено!');
+    }
 }
