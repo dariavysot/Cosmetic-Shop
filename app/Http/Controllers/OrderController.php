@@ -111,13 +111,15 @@ class OrderController extends Controller
             abort(403);
         }
 
-        // Повертаємо товари на склад перед видаленням
-        foreach ($order->items as $item) {
-            $inventory = StoreInventory::where('cosmetic_id', $item->cosmetic_id)->first();
+        // Повертаємо товари на склад ТІЛЬКИ якщо замовлення НЕ completed
+        if ($order->status !== 'completed') {
+            foreach ($order->items as $item) {
+                $inventory = StoreInventory::where('cosmetic_id', $item->cosmetic_id)->first();
 
-            if ($inventory) {
-                $inventory->quantity += $item->quantity;
-                $inventory->save();
+                if ($inventory) {
+                    $inventory->quantity += $item->quantity;
+                    $inventory->save();
+                }
             }
         }
 
