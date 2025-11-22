@@ -67,6 +67,14 @@ Route::prefix('inventory')->group(function () {
         ->name('inventory.add');
 });
 
+Route::middleware(['auth', 'admin'])->group(function () {
+    // Форма редагування запасів
+    Route::get('/inventory/edit', [InventoryController::class, 'editForm'])->name('inventory.editForm');
+
+    // Обробка оновлення запасів
+    Route::post('/inventory/edit', [InventoryController::class, 'updateQuantity'])->name('inventory.updateQuantity');
+});
+
 
 // Stores
 Route::resource('stores', StoreController::class);
@@ -79,4 +87,20 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
     Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/delete/{id}', [CartController::class, 'destroy'])->name('cart.delete');
+});
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::post('/orders/create', [OrderController::class, 'create'])->name('orders.create');
+
+    Route::delete('/orders/{order}', [OrderController::class, 'destroy'])
+        ->name('orders.destroy');
+
+
+    // Лише адмін може змінювати статус
+    Route::middleware('admin')->group(function () {
+        Route::post('/orders/{order}/status', [OrderController::class, 'updateStatus'])
+            ->name('orders.updateStatus');
+    });
 });

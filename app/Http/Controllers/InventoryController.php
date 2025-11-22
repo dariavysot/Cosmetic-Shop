@@ -41,4 +41,40 @@ class InventoryController extends Controller
 
         return back()->with('success', 'Stock updated.');
     }
+
+    public function editForm()
+    {
+        $stores = \App\Models\Store::all(); // всі склади
+        $cosmetics = \App\Models\Cosmetic::all(); // всі косметики
+
+        return view('inventory.edit', compact('stores', 'cosmetics'));
+    }
+
+    public function updateQuantity(Request $request)
+    {
+        $request->validate([
+            'store_id' => 'required|exists:stores,id',
+            'cosmetic_id' => 'required|exists:cosmetics,id',
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $inventory = \App\Models\StoreInventory::where('store_id', $request->store_id)
+            ->where('cosmetic_id', $request->cosmetic_id)
+            ->first();
+
+        if (!$inventory) {
+            // Якщо ще немає запису для цього складу та косметики, створимо
+            $inventory = \App\Models\StoreInventory::create([
+                'store_id' => $request->store_id,
+                'cosmetic_id' => $request->cosmetic_id,
+                'quantity' => 0,
+            ]);
+        }
+
+        $inventory->quantity += $request->quantity;
+        $inventory->save();
+
+        return back()->with('success', 'Кількість оновлено!');
+    }
+
 }

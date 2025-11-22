@@ -24,40 +24,39 @@ class CartController extends Controller
     public function add(Request $request)
     {
         $request->validate([
-            'cosmetic_id' => 'required|exists:cosmetics,id',
-            'quantity' => 'required|integer|min:1'
+            'cosmetic_id' => 'required|exists:cosmetics,id'
         ]);
 
         $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
         $cosmetic = Cosmetic::findOrFail($request->cosmetic_id);
 
-        // Перевірка наявності на складах
+        // Перевіряємо наявність хоча б 1 одиниці на складах
         $available = StoreInventory::where('cosmetic_id', $cosmetic->id)->sum('quantity');
 
+        if ($available < 1) {
+            return back()->with('error', 'Товару немає на складі.');
+        }
+
+        // Перевіряємо, чи вже є в кошику
         $existing = CartItem::where('cart_id', $cart->id)
             ->where('cosmetic_id', $cosmetic->id)
             ->first();
 
-        $requestedTotal = ($existing?->quantity ?? 0) + $request->quantity;
-
-        if ($requestedTotal > $available) {
-            return back()->with('error', 'Not enough stock in stores.');
-        }
-
         if ($existing) {
-            $existing->quantity += $request->quantity;
-            $existing->save();
-        } else {
-            CartItem::create([
-                'cart_id' => $cart->id,
-                'cosmetic_id' => $cosmetic->id,
-                'quantity' => $request->quantity,
-                'price_snapshot' => $cosmetic->price,
-            ]);
+            return redirect()->route('cart.index')
+                ->with('info', 'Товар вже є у кошику. Ви можете змінити кількість там.');
         }
 
-         return redirect()->route('cart.index')
-        ->with('success', 'Товар додано до кошика!');
+        // Додаємо товар з кількістю = 1
+        CartItem::create([
+            'cart_id' => $cart->id,
+            'cosmetic_id' => $cosmetic->id,
+            'quantity' => 1,
+            'price_snapshot' => $cosmetic->price,
+        ]);
+
+        return redirect()->route('cart.index')
+            ->with('success', 'Товар додано до кошика!');
     }
 
     public function update(Request $request, $id)
@@ -66,17 +65,16 @@ class CartController extends Controller
             ->whereHas('cart', fn($q) => $q->where('user_id', Auth::id()))
             ->firstOrFail();
 
-        // Перевірка наявності
         $available = StoreInventory::where('cosmetic_id', $item->cosmetic_id)->sum('quantity');
 
         if ($request->quantity > $available) {
-            return back()->with('error', 'Not enough stock.');
+            return back()->with('error', 'Недостатньо товару на складах.');
         }
 
         $item->quantity = max(1, $request->quantity);
         $item->save();
 
-        return back()->with('success', 'Updated.');
+        return back()->with('success', 'Кількість змінено!');
     }
 
     public function destroy($id)
@@ -87,6 +85,6 @@ class CartController extends Controller
 
         $item->delete();
 
-        return back()->with('success', 'Deleted.');
+        return back()->with('success', 'Товар видалено з кошика.');
     }
 }

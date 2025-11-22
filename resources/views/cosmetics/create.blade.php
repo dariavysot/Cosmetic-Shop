@@ -1,16 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid mt-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="mb-4 text-center">
         <h2>Додати косметику</h2>
-        <a href="{{ route('cosmetics.index') }}" class="btn btn-secondary">Назад</a>
     </div>
 
-    <div class="card">
-        <div class="card-body">
 
+         <div class="card custom-card p-4">
             <form action="{{ route('cosmetics.store') }}" method="POST">
                 @csrf
 
@@ -31,8 +29,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Ціна (грн)</label>
-                    <input type="number" name="price" step="0.01" min="0"
-                           class="form-control" required>
+                    <input type="number" name="price" step="0.01" min="0" class="form-control" required>
                 </div>
 
                 <div class="mb-3">
@@ -45,12 +42,66 @@
                     </select>
                 </div>
 
-                <button class="btn btn-success">Створити</button>
+                <button class="btn btn-success back-btn">Створити</button>
+                <a href="{{ route('cosmetics.index') }}" class="btn btn-minimal">Назад</a>
 
             </form>
-
-        </div>
-    </div>
+        </div>        
 
 </div>
+
+{{-- Стилі для форм і кнопок --}}
+<style>
+    .form-label {
+        font-weight: 500;
+    }
+
+    .form-control, .form-select {
+        border: 2px solid #1C1C1C;
+        border-radius: 0;
+        padding: 6px 10px;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #1C1C1C;
+        box-shadow: none;
+    }
+
+     .custom-card {
+        border: 2px solid #1C1C1C;
+        border-radius: 0;
+    }
+
+    .btn-minimal {
+        border-radius: 0;
+        font-weight: 500;
+        padding: 6px 12px;
+        transition: all 0.3s ease;
+        border: 2px solid #1C1C1C;
+        background-color: #fff;
+        color: #1C1C1C;
+    }
+
+    .btn-minimal:hover {
+        background-color: #1C1C1C;
+        color: #fff;
+        border-color: #1C1C1C;
+    }
+
+    .back-btn {
+        background-color: #1C1C1C;
+        color: #fff;
+        border: 2px solid #1C1C1C;
+        border-radius: 0;
+        padding: 6px 20px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+        background-color: #fff;
+        color: #1C1C1C;
+        border-color: #1C1C1C;
+    }
+</style>
 @endsection
