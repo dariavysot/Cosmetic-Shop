@@ -3,12 +3,12 @@
 @section('content')
 <div class="container-fluid mt-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Додати косметику 2 злишки додати</h2>
+    <div class="mb-4 text-center">
+        <h2>Додати косметику</h2>
     </div>
 
 
-        
+         <div class="card custom-card p-4">
             <form action="{{ route('cosmetics.store') }}" method="POST">
                 @csrf
 
@@ -46,7 +46,7 @@
                 <a href="{{ route('cosmetics.index') }}" class="btn btn-minimal">Назад</a>
 
             </form>
-        
+        </div>        
 
 </div>
 
@@ -67,12 +67,9 @@
         box-shadow: none;
     }
 
-     .filter-wrapper {
+     .custom-card {
         border: 2px solid #1C1C1C;
         border-radius: 0;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0;
     }
 
     .btn-minimal {

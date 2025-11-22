@@ -2,42 +2,50 @@
 
 @section('content')
 <div class="container mt-4">
-    <h1 class="mb-4">Редагувати постачальника</h1>
+    <h1 class="mb-4 text-center">Редагувати постачальника</h1>
 
-    <form action="{{ route('suppliers.update', $supplier->id) }}" method="POST" class="mt-3">
-        @csrf
-        @method('PUT')
+    <div class="card custom-card p-4">
+        <form action="{{ route('suppliers.update', $supplier->id) }}" method="POST" class="mt-3">
+            @csrf
+            @method('PUT')
 
-        <div class="mb-3">
-            <label class="form-label">Назва постачальника:</label>
-            <input type="text" name="name" class="form-control"
-                   value="{{ $supplier->name }}" required>
-            @error('name') <small class="text-danger">{{ $message }}</small> @enderror
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Назва постачальника:</label>
+                <input type="text" name="name" class="form-control"
+                    value="{{ $supplier->name }}" required>
+                @error('name') <small class="text-danger">{{ $message }}</small> @enderror
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label">Телефон:</label>
-            <input type="text" name="phone" class="form-control"
-                   value="{{ $supplier->phone }}">
-            @error('phone') <small class="text-danger">{{ $message }}</small> @enderror
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Телефон:</label>
+                <input type="text" name="phone" class="form-control"
+                    value="{{ $supplier->phone }}">
+                @error('phone') <small class="text-danger">{{ $message }}</small> @enderror
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label">Email:</label>
-            <input type="email" name="email" class="form-control"
-                   value="{{ $supplier->email }}">
-            @error('email') <small class="text-danger">{{ $message }}</small> @enderror
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Email:</label>
+                <input type="email" name="email" class="form-control"
+                    value="{{ $supplier->email }}">
+                @error('email') <small class="text-danger">{{ $message }}</small> @enderror
+            </div>
 
-        <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-success back-btn">Оновити</button>
-            <a href="{{ route('suppliers.index') }}" class="btn btn-minimal">Назад</a>
-        </div>
-    </form>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success back-btn">Оновити</button>
+                <a href="{{ route('suppliers.index') }}" class="btn btn-minimal">Назад</a>
+            </div>
+        </form>
+    </div>
 </div>
 
 {{-- Стиль форм та кнопок --}}
 <style>
+
+    .custom-card {
+        border: 2px solid #1C1C1C;
+        border-radius: 0;
+    }
+
     .form-label {
         font-weight: 500;
     }

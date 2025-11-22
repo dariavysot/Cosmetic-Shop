@@ -3,11 +3,11 @@
 @section('content')
 <div class="container-fluid mt-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="mb-4 text-center">
         <h2>Редагувати косметику</h2>
     </div>
 
-    <div class="card p-3">
+    <div class="card custom-card p-4">
         <form action="{{ route('cosmetics.update', $cosmetic->id) }}" method="POST">
             @csrf
             @method('PUT')
@@ -56,6 +56,12 @@
 
 {{-- Стилі для форм і кнопок --}}
 <style>
+
+     .custom-card {
+        border: 2px solid #1C1C1C;
+        border-radius: 0;
+    }
+
     .form-label {
         font-weight: 500;
     }
