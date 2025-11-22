@@ -8,6 +8,8 @@ class Cosmetic extends Model
 {
     protected $fillable = [
         'name',
+        'sku',
+        'description',
         'price',
         'supplier_id',
     ];
@@ -17,9 +19,9 @@ class Cosmetic extends Model
         return $this->belongsTo(Supplier::class);
     }
 
-    public function inventory()
+    public function inventories()
     {
-        return $this->hasOne(StoreInventory::class, 'cosmetic_id');
+        return $this->hasMany(StoreInventory::class);
     }
 
     public function orderItems()
@@ -29,6 +31,6 @@ class Cosmetic extends Model
 
     public function cartItems()
     {
-        return $this->hasMany(ShoppingCart::class);
+        return $this->hasMany(CartItem::class);
     }
 }
