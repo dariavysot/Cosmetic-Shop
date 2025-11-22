@@ -3,59 +3,78 @@
 @section('content')
 
 <style>
-    .product-card {
-        border: none;
-        overflow: hidden;
-        background: #fff;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        height: 380px; /* фіксована висота картки */
-        display: flex;
-        flex-direction: column;
-    }
 
+    /* Заголовок */
     .catalog-title {
         text-align: center;
         font-weight: 600;
         margin-bottom: 30px;
-        letter-spacing: 0.5px;
         color: #1C1C1C;
+        letter-spacing: 0.5px;
     }
 
+    /* Пошук */
     .search-input {
-        border: 1.5px solid #1C1C1C !important;
+        border: 2px solid #1C1C1C !important;
         border-radius: 0 !important;
-        height: 36px;
-        font-size: 14px;
+        height: 40px;
         padding-left: 12px;
     }
 
-    .custom-btn {
-        background: white;
-        border: 1.5px solid #1C1C1C;
+    .search-btn {
+        border: 2px solid #1C1C1C;
         border-radius: 0;
-        color: #1C1C1C;
-        transition: 0.2s;
+        background: #fff;
+        padding: 0 16px;
+        transition: .3s ease;
     }
 
-    .custom-btn:hover {
+    .search-btn:hover {
+        background: #1C1C1C;
         color: white;
-        border: 1.5px solid #1C1C1C;
+    }
+
+    /* Картка продукту */
+    .product-card {
+        border: 2px solid #1C1C1C;
+        border-radius: 0;
+        height: 400px;
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        transition: 0.25s ease;
     }
 
     .product-img {
-        height: 160px;
+        width: 100%;
+        height: 200px; /* однакова висота */
+        border-bottom: 2px solid #1C1C1C;
+        background: #efefef;
+        border-radius: 0;
+        overflow: hidden; /* важливо для crop */
+    }
+
+    .product-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;     /* обрізає фото красиво */
+        object-position: center;
+    }
+
+    .placeholder {
+        width: 100%;
+        height: 100%;
         background: #f3f3f3;
-        border-bottom: 1px solid #eee;
+        color: #777;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 26px;
-        color: #bbb;
+        font-size: 18px;
     }
 
     .product-body {
-        flex: 1; /* дозволяє тексту розтягувати простір */
-        padding: 14px 18px;
+        flex: 1;
+        padding: 14px 16px;
         display: flex;
         flex-direction: column;
     }
@@ -68,53 +87,59 @@
 
     .product-desc {
         font-size: 13px;
-        color: #666;
-        margin-bottom: 10px;
-        flex-grow: 1; /* займає вільний простір, щоб кнопка була знизу */
+        color: #555;
+        margin-bottom: auto;
+        margin-top: 5px;
     }
 
     .price {
-        font-size: 20px;
+        margin-top: 10px;
         font-weight: bold;
-        color:  #1C1C1C;
-        margin-bottom: 12px;
+        font-size: 18px;
+        color: #1C1C1C;
     }
 
+    /* Мінімалістична кнопка */
     .btn-add {
         width: 100%;
-        padding: 10px;
+        margin-top: 12px;
+        border: 2px solid #1C1C1C;
+        border-radius: 0;
+        padding: 7px 0;
+        background: #fff;
+        color: #1C1C1C;
         font-weight: 500;
-        margin-top: auto;
+        transition: .3s ease;
+    }
 
-        background-color: #ffffff;          /* білий фон */
-        color: #1C1C1C;                     /* графітовий текст */
-        border: 1.5px solid #1C1C1C;          /* графітова рамка */
-
-        border-radius: 0;                   /* без закруглень */
-        transition: 0.25s ease-in-out;      /* плавний ховер */
+    .btn-add:hover {
+        background: #1C1C1C;
+        color: #fff;
     }
 
 </style>
+
 
 <div class="container mt-4">
 
     <h2 class="catalog-title">Каталог косметики</h2>
 
-     {{-- ПОШУК --}}
-    <form method="GET" action="{{ route('home') }}" 
-      class="mb-4 d-flex justify-content-center">
+    {{-- ПОШУК --}}
+    <form method="GET" 
+          action="{{ route('home') }}" 
+          class="mb-4 d-flex justify-content-center">
 
-        <div style="width: 600px;" class="input-group">
+        <div class="input-group" style="max-width: 600px;">
 
-            <input 
-                type="text" 
-                name="search" 
+            <input type="text"
+                name="search"
                 class="form-control search-input"
                 placeholder="Пошук за назвою..."
-                value="{{ request('search') }}"
-            >
+                value="{{ request('search') }}">
 
-            <button class="btn custom-btn"><img width="19.5" height="19.5" src="https://img.icons8.com/ios/50/search--v1.png" alt="search--v1"/></button>
+            <button class="btn search-btn">
+                🔍
+            </button>
 
         </div>
     </form>
@@ -125,9 +150,12 @@
         @forelse ($cosmetics as $cosmetic)
             <div class="col-md-4 col-lg-3">
                 <div class="product-card">
-
                     <div class="product-img">
-                        Фото
+                        @if($cosmetic->image ?? false)
+                            <img src="{{ asset('storage/' . $cosmetic->image) }}" alt="">
+                        @else
+                            <div class="placeholder">Фото</div>
+                        @endif
                     </div>
 
                     <div class="product-body">
@@ -147,14 +175,13 @@
                                 <form action="{{ route('cart.add') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="cosmetic_id" value="{{ $cosmetic->id }}">
-                                    <button class="btn btn-success btn-add">
+                                    <button class="btn-add">
                                         Додати в кошик
                                     </button>
-
                                 </form>
                             @endif
                         @else
-                            <a href="{{ route('login') }}" class="btn btn-outline-primary btn-add">
+                            <a href="{{ route('login') }}" class="btn-add">
                                 Увійти щоб купувати
                             </a>
                         @endauth
@@ -162,7 +189,6 @@
                     </div>
                 </div>
             </div>
-
         @empty
             <p class="text-muted">Поки що товарів немає.</p>
         @endforelse
