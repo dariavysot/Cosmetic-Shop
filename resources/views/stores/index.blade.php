@@ -15,6 +15,7 @@
             <table class="table custom-table mb-0">
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Назва</th>
                         <th>Адреса</th>
                         <th>Інвентар</th>
@@ -24,6 +25,7 @@
                 <tbody>
                     @foreach($stores as $store)
                         <tr>
+                            <th>{{ $store->id }}</th>
                             <td>{{ $store->name }}</td>
                             <td>{{ $store->address }}</td>
                             <td>

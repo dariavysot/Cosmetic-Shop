@@ -50,6 +50,7 @@
         <div class="card-body p-0">
             <table class="table custom-table mb-0">
                 <tr>
+                    <th>#</th>
                     <th>Назва</th>
                     <th>SKU</th>
                     <th>Опис</th>
@@ -64,6 +65,7 @@
             <tbody>
                 @foreach($cosmetics as $item)
                     <tr>
+                         <td>{{ $item->id }}</td>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->sku ?? '-' }}</td>
                         <td style="max-width: 300px; word-wrap: break-word;">{{ $item->description }}</td>
