@@ -7,21 +7,6 @@
 
 ---
 
-## Структура репозиторію
-Cosmetic-Shop/ 
-│
-├── src/ # Весь Laravel-проєкт 
-├── docs/ # Документація 
-│ ├── task.md # Постановка завдання 
-│ └── diagram.png # ER-діаграма бази даних 
-├── README.md # Цей файл 
-├── .gitignore 
-├── .editorconfig 
-├── .gitattributes 
-└── .env.example
-
----
-
 ## Використані технології
 * **Backend:** PHP, Laravel
 * **База даних:** MySQL / MariaDB
